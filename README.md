@@ -12,3 +12,5 @@ Weitere Themen:
    Adresse auf 0 stellen )
 - Übersichten
 - ...
+
+Nutzung auf eigene Gefahr !
