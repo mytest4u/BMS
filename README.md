@@ -1,6 +1,7 @@
 # China Akku BMS Dokument
 Howto see the Video
-https://youtu.be/ZT6mBZ16EYc
+Dokumentation https://youtu.be/ZT6mBZ16EYc  
+YT Videos zum BMS unter: MyTest4u  https://www.youtube.com/@MyTest4u
 
 Weitere Themen:
 - Dokumentation Akku Manual
