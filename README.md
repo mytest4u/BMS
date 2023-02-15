@@ -1,14 +1,33 @@
-# China Akku BMS
+# China Battery BMS
 
 Fork from https://github.com/mytest4u/BMS
 
 > **Warning**
 > Use at your own risk, especially the firmware!
 
-## Links
-* [Cerbo GX: VE.Can to CAN-bus BMS cables manual](https://www.victronenergy.com/live/battery_compatibility:can-bus_bms-cable)
+## Facts:
+```
+BMS: DR01 or DR-JC03
+Capacity: from 60Ah, up to 300Ah
+Where to buy: all over Aliexpress, like "PAPOOL LiFePO4"
+```
+
+## Connect to Victron Controller
+First of when only DIP 6 is facing upwards, it's recognized as a "Pylontech battery" and the charge controller will not see any battery details like cell voltage, temps - so avoid using this mode.
+
+### Cerbo GX
+Buy a cable from Victron or build it yourself: [Cerbo GX: VE.Can to CAN-bus BMS cables manual](https://www.victronenergy.com/live/battery_compatibility:can-bus_bms-cable). DIP 5 & DIP 6 up, conenct the special CAT cabel and enjoy the battery details.
+
+
+### Venus OS
 * [Venus OS on Pi: CAN Interfaces](https://github.com/victronenergy/venus/wiki/RaspberryPi-CAN-Interfaces)
-* [dbus-serialbattery issue,  Support BMS DR-JC03](https://github.com/Louisvdw/dbus-serialbattery/issues/327)
+
+Victron [Venus OS](https://github.com/victronenergy/venus) provides the Battery Can Bus drivers but not the Hardware port. So just get a [Waveshare RS485 CAN Pi HAT](https://www.waveshare.com/wiki/RS485_CAN_HAT) and connect GND, CAN-L (Low) to Pin 5 and CAN-H (High) to Pin 4. There are certainly other options for non-Raspberry Pis Venus OS setups. So we do not need BMS support in [dbus-serialbattery](https://github.com/Louisvdw/dbus-serialbattery) / [issue support BMS DR-JC03](https://github.com/Louisvdw/dbus-serialbattery/issues/327).
+
+## Battery Stack Setup
+1. Connect the master pack with DIP 5 and 6 facing upwards, as indicated in the Victron connection instructions.
+2. The pack will be recognized as an "LFP battery" and you can view the voltage of the highest and lowest cell under the "Details" section.
+3. You can also see the number of packs online and if there's a pack preventing charging/discharging.
 
 ## [Documentation and Manuals](Docs) of the Akku
 * DipSwitch, Reset...
@@ -25,16 +44,9 @@ Fork from https://github.com/mytest4u/BMS
 2. Make sure to install the necessary RS485 drivers for the connection to be established.
 3. Open the "DR-Application.exe" application and keep the window open.
 4. Open the "index.html" file located in the "dist" folder using a web browser.
-
 5. On the "Help" tab, change the language to English and enter the password 666666 if prompted.
-
 6. In the "Settings" tab, select the "Update" option, choose the bin file, and initiate the flashing process (you will know it's working if the green LED on the battery is flashing).
 
-#### Victron connection instructions
-1. Connect the master pack with DIP 5 and 6 facing upwards, as indicated in the Victron connection instructions.
-2. The pack will be recognized as an "LFP battery" and you can view the voltage of the highest and lowest cell under the "Details" section.
-3. You can also see the number of packs online and if there's a pack preventing charging/discharging.
-4. When DIP 6 is facing upwards, it's recognized as a "Pylontech" Multiplus, and the charge controller will not charge the battery, so avoid using this mode.
 
 ### Firmware Files (gladly PR new ones)
 * [`DR01_16S100JC03_V2 0 0_T1_V`](Firmware/DR01_16S100JC03_V2%200%200_T1_V.bin) - The V in the file stands for Victron
