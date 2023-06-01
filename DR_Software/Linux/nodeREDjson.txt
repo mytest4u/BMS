@@ -1,0 +1,1375 @@
+[
+    {
+        "id": "0ebd473cff4b5bd8",
+        "type": "tab",
+        "label": "48V Batterie",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "93dbc71612ff0e7d",
+        "type": "inject",
+        "z": "0ebd473cff4b5bd8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "20",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "~22014A42E00201FD28",
+        "payloadType": "str",
+        "x": 170,
+        "y": 820,
+        "wires": [
+            [
+                "21d579772308f34f"
+            ]
+        ]
+    },
+    {
+        "id": "21d579772308f34f",
+        "type": "serial request",
+        "z": "0ebd473cff4b5bd8",
+        "name": "",
+        "serial": "b4627b0fb8345b4a",
+        "x": 250,
+        "y": 940,
+        "wires": [
+            [
+                "15bfeb4d.cfe0f5",
+                "7a3627a65637f621",
+                "8fca9697c104f3d1",
+                "17934141e68cf788",
+                "fd9c17c9237eee6d",
+                "aa4b05f298f48abc",
+                "3b2c101e31048b10",
+                "5b332525aa3af0fc",
+                "f94f2cd9287e045a",
+                "8ec008a97799751f",
+                "1ed3a4cfb3ad5bd4",
+                "dbf246b30a27f085",
+                "37e1517feccf2faa",
+                "d5ef7c626d2ae23c",
+                "9af9ac6d5e928449",
+                "3927021036f44ac1",
+                "d3beaa8522f0c26a",
+                "0fbd528d7364e0e8",
+                "3ad5c45e2bd24d20",
+                "de2b30565449890d",
+                "7c5e8c1101a91450",
+                "583f5c5d053d4b03",
+                "12e2006f3009e87c",
+                "db04dc10bf08945d"
+            ]
+        ]
+    },
+    {
+        "id": "15bfeb4d.cfe0f5",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "SoC",
+        "func": "msg.topic = \"48V_Batterie/Battery_charge_state\"\nvar soc = msg.payload.substr(15, 4);\nmsg.payload = (parseInt(soc, 16)/100);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 480,
+        "wires": [
+            [
+                "4966ded6288ca7a1",
+                "7eb9ff77e337d88c"
+            ]
+        ]
+    },
+    {
+        "id": "4966ded6288ca7a1",
+        "type": "mqtt out",
+        "z": "0ebd473cff4b5bd8",
+        "name": "fhem-mqtt",
+        "topic": "",
+        "qos": "1",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "1a2da74c7b80a463",
+        "x": 1040,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "7a3627a65637f621",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Batterie V",
+        "func": "msg.topic = \"48V_Batterie/Battery_Voltage\"\nvar batv = msg.payload.substr(19, 4);\nmsg.payload = (parseInt(batv, 16)/100);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 540,
+        "wires": [
+            [
+                "ab6059d781037050",
+                "4966ded6288ca7a1"
+            ]
+        ]
+    },
+    {
+        "id": "ab6059d781037050",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Spannung",
+        "group": "658ba2efac85ceec",
+        "order": 0,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Spannung",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "48",
+        "max": "56",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "51",
+        "seg2": "55",
+        "x": 1050,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "7eb9ff77e337d88c",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "SoC",
+        "group": "658ba2efac85ceec",
+        "order": 1,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "SOC",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ffff00"
+        ],
+        "seg1": "20",
+        "seg2": "90",
+        "x": 1030,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "8fca9697c104f3d1",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Strom A",
+        "func": "msg.topic = \"48V_Batterie/Battery_Current\"\nvar bata = msg.payload.substr(119, 4);\nmsg.payload = ((parseInt(bata, 16)/100));\n\nif (msg.payload > 200) { msg.payload = ((parseInt(bata, 16) -65535)/ 100);}\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 660,
+        "wires": [
+            [
+                "dd8c4467c34d16cf",
+                "4966ded6288ca7a1"
+            ]
+        ]
+    },
+    {
+        "id": "17934141e68cf788",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Batterie all Data DEC",
+        "func": "var soc = msg.payload.substr(15, 4);\nvar batv = msg.payload.substr(19, 4);\n\nvar c1 = msg.payload.substr(25, 4);\nvar c2 = msg.payload.substr(29, 4);\nvar c3 = msg.payload.substr(33, 4);\nvar c4 = msg.payload.substr(37, 4);\nvar c5 = msg.payload.substr(41, 4);\nvar c6 = msg.payload.substr(45, 4);\nvar c7 = msg.payload.substr(49, 4);\nvar c8 = msg.payload.substr(53, 4);\nvar c9 = msg.payload.substr(57, 4);\nvar c10 = msg.payload.substr(61, 4);\nvar c11 = msg.payload.substr(65, 4);\nvar c12 = msg.payload.substr(69, 4);\nvar c13 = msg.payload.substr(73, 4);\nvar c14 = msg.payload.substr(77, 4);\nvar c15 = msg.payload.substr(81, 4);\nvar c16 = msg.payload.substr(85, 4);\n\nvar t1 = msg.payload.substr(89, 4);\nvar t2 = msg.payload.substr(93, 4);\nvar t3 = msg.payload.substr(97, 4);\nvar t4 = msg.payload.substr(103, 4);\nvar t5 = msg.payload.substr(107, 4);\nvar t6 = msg.payload.substr(111, 4);\nvar t7 = msg.payload.substr(115, 4);\n\nvar batc = msg.payload.substr(129, 4);\nvar batg = msg.payload.substr(137, 4);\n\n\n\n\n\nmsg.SoC = parseInt(soc, 16) / 100;\nmsg.Batv = parseInt(batv, 16) / 100;\nmsg.BatC = parseInt(batc, 16) / 1000;\nmsg.BatG = parseInt(batg, 16) / 100;\n\nmsg.C1v = parseInt(c1, 16) / 1000;\nmsg.C2v = parseInt(c2, 16) / 1000;\nmsg.C3v = parseInt(c3, 16) / 1000;\nmsg.C4v = parseInt(c4, 16) / 1000;\nmsg.C5v = parseInt(c5, 16) / 1000;\nmsg.C6v = parseInt(c6, 16) / 1000;\nmsg.C7v = parseInt(c7, 16) / 1000;\nmsg.C8v = parseInt(c8, 16) / 1000;\nmsg.C9v = parseInt(c9, 16) / 1000;\nmsg.C10v = parseInt(c10, 16) / 1000;\nmsg.C11v = parseInt(c11, 16) / 1000;\nmsg.C12v = parseInt(c12, 16) / 1000;\nmsg.C13v = parseInt(c13, 16) / 1000;\nmsg.C14v = parseInt(c14, 16) / 1000;\nmsg.C15v = parseInt(c15, 16) / 1000;\nmsg.C16v = parseInt(c16, 16) / 1000;\n\nmsg.T1 = parseInt(t1, 16) / 10;\nmsg.T2 = parseInt(t2, 16) / 10;\nmsg.T3 = parseInt(t3, 16) / 10;\nmsg.T4 = parseInt(t4, 16) / 10;\nmsg.T5 = parseInt(t5, 16) / 10;\nmsg.T6 = parseInt(t6, 16) / 10;\nmsg.T7 = parseInt(t7, 16) / 10;\n\n\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 220,
+        "wires": [
+            [
+                "5a9e0f211285430d"
+            ]
+        ]
+    },
+    {
+        "id": "dd8c4467c34d16cf",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Strom",
+        "group": "658ba2efac85ceec",
+        "order": 0,
+        "width": "4",
+        "height": "4",
+        "gtype": "compass",
+        "title": "Strom",
+        "label": "A",
+        "format": "{{value}}",
+        "min": "-50",
+        "max": "50",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "0",
+        "seg2": "0",
+        "x": 1030,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "5a9e0f211285430d",
+        "type": "debug",
+        "z": "0ebd473cff4b5bd8",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "fd9c17c9237eee6d",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Temp_3",
+        "func": "msg.topic = \"48V_Batterie/Temp_3\"\nvar t3 = msg.payload.substr(97, 4);\nmsg.payload = (parseInt(t3, 16)/10);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 780,
+        "wires": [
+            [
+                "4966ded6288ca7a1",
+                "935a78ae28d5c4a7",
+                "08718223468303a5"
+            ]
+        ]
+    },
+    {
+        "id": "aa4b05f298f48abc",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Temp_1",
+        "func": "msg.topic = \"48V_Batterie/Temp_1\"\nvar t1 = msg.payload.substr(89, 4);\nmsg.payload = (parseInt(t1, 16)/10);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 720,
+        "wires": [
+            [
+                "4966ded6288ca7a1",
+                "935a78ae28d5c4a7",
+                "341bb39a8a4a570e"
+            ]
+        ]
+    },
+    {
+        "id": "935a78ae28d5c4a7",
+        "type": "ui_chart",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Temp",
+        "group": "de6cd84361a0e3c7",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Temp",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "dd HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "15",
+        "ymax": "40",
+        "removeOlder": "3",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "86400",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff0000",
+            "#0000ff",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 1030,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1c7dd05fc5097aab",
+        "type": "debug",
+        "z": "0ebd473cff4b5bd8",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "3b2c101e31048b10",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Batterie all Data HEX",
+        "func": "var soc = msg.payload.substr(15, 4);\nvar batv = msg.payload.substr(19, 4);\n\nvar c1 = msg.payload.substr(25, 4);\nvar c2 = msg.payload.substr(29, 4);\nvar c3 = msg.payload.substr(33, 4);\nvar c4 = msg.payload.substr(37, 4);\nvar c5 = msg.payload.substr(41, 4);\nvar c6 = msg.payload.substr(45, 4);\nvar c7 = msg.payload.substr(49, 4);\nvar c8 = msg.payload.substr(53, 4);\nvar c9 = msg.payload.substr(57, 4);\nvar c10 = msg.payload.substr(61, 4);\nvar c11 = msg.payload.substr(65, 4);\nvar c12 = msg.payload.substr(69, 4);\nvar c13 = msg.payload.substr(73, 4);\nvar c14 = msg.payload.substr(77, 4);\nvar c15 = msg.payload.substr(81, 4);\nvar c16 = msg.payload.substr(85, 4);\n\nvar t1 = msg.payload.substr(89, 4);\nvar t2 = msg.payload.substr(93, 4);\nvar t3 = msg.payload.substr(97, 4);\nvar t4 = msg.payload.substr(103, 4);\nvar t5 = msg.payload.substr(107, 4);\nvar t6 = msg.payload.substr(111, 4);\nvar t7 = msg.payload.substr(115, 4);\n\nvar bata = msg.payload.substr(119, 4);\nvar batx = msg.payload.substr(129, 4);\nvar batc = msg.payload.substr(133, 4);\n\nvar baty = msg.payload.substr(125, 4);\n\nmsg.SoC = soc;\nmsg.Batv = batv;\nmsg.BatA = bata;\nmsg.C1v = c1;\nmsg.C2v = c2;\nmsg.C3v = c3;\nmsg.C4v = c4;\nmsg.C5v = c5;\nmsg.C6v = c6;\nmsg.C7v = c7;\nmsg.C8v = c8;\nmsg.C9v = c9;\nmsg.C10v = c10;\nmsg.C11v = c11;\nmsg.C12v = c12;\nmsg.C13v = c13;\nmsg.C14v = c14;\nmsg.C15v = c15;\nmsg.C16v = c16;\n\nmsg.T1 = t1;\nmsg.T2 = t2;\nmsg.T3 = t3;\nmsg.T4 = t4;\nmsg.T5 = t5;\nmsg.T6 = t6;\nmsg.T7 = t7;\n\nmsg.BatA = bata;\nmsg.BatC = batc;\nmsg.Baty = baty;\nmsg.Batx = batx;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 140,
+        "wires": [
+            [
+                "1c7dd05fc5097aab"
+            ]
+        ]
+    },
+    {
+        "id": "5b332525aa3af0fc",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Capacity Ah",
+        "func": "msg.topic = \"48V_Batterie/Battery_Capacity\"\nvar batc = msg.payload.substr(137, 4);\nmsg.payload = (parseInt(batc, 16)/100);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 600,
+        "wires": [
+            [
+                "4966ded6288ca7a1",
+                "30a640e6ca8c8a60"
+            ]
+        ]
+    },
+    {
+        "id": "30a640e6ca8c8a60",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Kapazität",
+        "group": "658ba2efac85ceec",
+        "order": 0,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Kapazität",
+        "label": "Ah",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "130",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "20",
+        "seg2": "125",
+        "x": 1040,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "f94f2cd9287e045a",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C1",
+        "func": "msg.topic = \"48V_Batterie/Battery_C1\"\nvar c1 = msg.payload.substr(25, 4);\nmsg.payload = (parseInt(c1, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1020,
+        "wires": [
+            [
+                "16d87f3cdfc94322",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "16d87f3cdfc94322",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C1",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C1",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "8ec008a97799751f",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C2",
+        "func": "msg.topic = \"48V_Batterie/Battery_C2\"\nvar c2 = msg.payload.substr(29, 4);\nmsg.payload = (parseInt(c2, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1080,
+        "wires": [
+            [
+                "101d379a51bf2b60",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "101d379a51bf2b60",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C2",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C2",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "1ed3a4cfb3ad5bd4",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C3",
+        "func": "msg.topic = \"48V_Batterie/Battery_C3\"\nvar c3 = msg.payload.substr(33, 4);\nmsg.payload = (parseInt(c3, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1140,
+        "wires": [
+            [
+                "e926204833167fd7",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "e926204833167fd7",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C3",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C3",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "dbf246b30a27f085",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C4",
+        "func": "msg.topic = \"48V_Batterie/Battery_C4\"\nvar c4 = msg.payload.substr(37, 4);\nmsg.payload = (parseInt(c4, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1200,
+        "wires": [
+            [
+                "337c5117aa4c696e",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "337c5117aa4c696e",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C4",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C4",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "37e1517feccf2faa",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C5",
+        "func": "msg.topic = \"48V_Batterie/Battery_C5\"\nvar c5 = msg.payload.substr(41, 4);\nmsg.payload = (parseInt(c5, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1260,
+        "wires": [
+            [
+                "e674b67e07ed33e8",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "e674b67e07ed33e8",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C5",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C5",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "d5ef7c626d2ae23c",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C6",
+        "func": "msg.topic = \"48V_Batterie/Battery_C6\"\nvar c6 = msg.payload.substr(45, 4);\nmsg.payload = (parseInt(c6, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1320,
+        "wires": [
+            [
+                "5deb5698cffbf131",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "5deb5698cffbf131",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C6",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C6",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "9af9ac6d5e928449",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C7",
+        "func": "msg.topic = \"48V_Batterie/Battery_C7\"\nvar c7 = msg.payload.substr(49, 4);\nmsg.payload = (parseInt(c7, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1380,
+        "wires": [
+            [
+                "dbcd13b4dc91a819",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "dbcd13b4dc91a819",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C7",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C7",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "3927021036f44ac1",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C8",
+        "func": "msg.topic = \"48V_Batterie/Battery_C8\"\nvar c8 = msg.payload.substr(53, 4);\nmsg.payload = (parseInt(c8, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1440,
+        "wires": [
+            [
+                "628bd9c4100a54e3",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "628bd9c4100a54e3",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C8",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C8",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "d3beaa8522f0c26a",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C9",
+        "func": "msg.topic = \"48V_Batterie/Battery_C9\"\nvar c9 = msg.payload.substr(57, 4);\nmsg.payload = (parseInt(c9, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1500,
+        "wires": [
+            [
+                "08bc5e8c5c327ba8",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "08bc5e8c5c327ba8",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C9",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C9",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "0fbd528d7364e0e8",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C10",
+        "func": "msg.topic = \"48V_Batterie/Battery_C10\"\nvar c10 = msg.payload.substr(61, 4);\nmsg.payload = (parseInt(c10, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1560,
+        "wires": [
+            [
+                "40d438410c2862dc",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "40d438410c2862dc",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C10",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C10",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "3ad5c45e2bd24d20",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C11",
+        "func": "msg.topic = \"48V_Batterie/Battery_C11\"\nvar c11 = msg.payload.substr(65, 4);\nmsg.payload = (parseInt(c11, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1620,
+        "wires": [
+            [
+                "c355f2aecb978df5",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "c355f2aecb978df5",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C11",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C11",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "de2b30565449890d",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C12",
+        "func": "msg.topic = \"48V_Batterie/Battery_C12\"\nvar c12 = msg.payload.substr(69, 4);\nmsg.payload = (parseInt(c12, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1680,
+        "wires": [
+            [
+                "2fd54e7b57569585",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "2fd54e7b57569585",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C12",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C12",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "7c5e8c1101a91450",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C13",
+        "func": "msg.topic = \"48V_Batterie/Battery_C13\"\nvar c13 = msg.payload.substr(73, 4);\nmsg.payload = (parseInt(c13, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1740,
+        "wires": [
+            [
+                "f0eadb60b1171004",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "f0eadb60b1171004",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C13",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C13",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "583f5c5d053d4b03",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C14",
+        "func": "msg.topic = \"48V_Batterie/Battery_C14\"\nvar c14 = msg.payload.substr(77, 4);\nmsg.payload = (parseInt(c14, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1800,
+        "wires": [
+            [
+                "cf5d08510fd77c0b",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "cf5d08510fd77c0b",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C14",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C14",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1800,
+        "wires": []
+    },
+    {
+        "id": "12e2006f3009e87c",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C15",
+        "func": "msg.topic = \"48V_Batterie/Battery_C15\"\nvar c15 = msg.payload.substr(81, 4);\nmsg.payload = (parseInt(c15, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1860,
+        "wires": [
+            [
+                "a29f55a251495c1e",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "a29f55a251495c1e",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C15",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C15",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "db04dc10bf08945d",
+        "type": "function",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C16",
+        "func": "msg.topic = \"48V_Batterie/Battery_C16\"\nvar c16 = msg.payload.substr(85, 4);\nmsg.payload = (parseInt(c16, 16)/1000);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1920,
+        "wires": [
+            [
+                "e1edfa1571afe29f",
+                "2d5b0ef865873b73"
+            ]
+        ]
+    },
+    {
+        "id": "e1edfa1571afe29f",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "C16",
+        "group": "8eb2d32010fffae1",
+        "order": 0,
+        "width": "2",
+        "height": "2",
+        "gtype": "gage",
+        "title": "C16",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2.6",
+        "max": "3.6",
+        "colors": [
+            "#ff0000",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "3.1",
+        "seg2": "3.4",
+        "x": 1030,
+        "y": 1920,
+        "wires": []
+    },
+    {
+        "id": "2d5b0ef865873b73",
+        "type": "ui_chart",
+        "z": "0ebd473cff4b5bd8",
+        "d": true,
+        "name": "Cell",
+        "group": "7f9db63ff2ff7de2",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Cell Overview",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "3.1",
+        "ymax": "3.5",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 1030,
+        "y": 2000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "08718223468303a5",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "BMS Temp",
+        "group": "5566955c13b1ed8c",
+        "order": 0,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "BMS",
+        "label": "C",
+        "format": "{{value}}",
+        "min": "20",
+        "max": "50",
+        "colors": [
+            "#0000ff",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "25",
+        "seg2": "40",
+        "x": 1050,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "341bb39a8a4a570e",
+        "type": "ui_gauge",
+        "z": "0ebd473cff4b5bd8",
+        "name": "Case Temp",
+        "group": "5566955c13b1ed8c",
+        "order": 0,
+        "width": "4",
+        "height": "4",
+        "gtype": "gage",
+        "title": "Case",
+        "label": "C",
+        "format": "{{value}}",
+        "min": "20",
+        "max": "40",
+        "colors": [
+            "#0000ff",
+            "#00ff00",
+            "#ff0000"
+        ],
+        "seg1": "25",
+        "seg2": "35",
+        "x": 1050,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "b4627b0fb8345b4a",
+        "type": "serial-port",
+        "serialport": "/dev/ttyUSB1",
+        "serialbaud": "19200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "1000",
+        "bin": "false",
+        "out": "time",
+        "addchar": "\\r",
+        "responsetimeout": "5000"
+    },
+    {
+        "id": "1a2da74c7b80a463",
+        "type": "mqtt-broker",
+        "name": "fhem-mqtt-Batterie",
+        "broker": "192.168.178.2",
+        "port": "1883",
+        "clientid": "nodered-batterie",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "658ba2efac85ceec",
+        "type": "ui_group",
+        "name": "Übersicht",
+        "tab": "c76e60bebc2623b5",
+        "order": 1,
+        "disp": true,
+        "width": "8",
+        "collapse": true
+    },
+    {
+        "id": "de6cd84361a0e3c7",
+        "type": "ui_group",
+        "name": "Temperatur",
+        "tab": "bc442a4cdc4adb08",
+        "order": 2,
+        "disp": true,
+        "width": "16",
+        "collapse": true
+    },
+    {
+        "id": "8eb2d32010fffae1",
+        "type": "ui_group",
+        "name": "Cellen",
+        "tab": "c76e60bebc2623b5",
+        "order": 3,
+        "disp": true,
+        "width": "8",
+        "collapse": false
+    },
+    {
+        "id": "7f9db63ff2ff7de2",
+        "type": "ui_group",
+        "name": "Cell",
+        "tab": "bc442a4cdc4adb08",
+        "order": 1,
+        "disp": true,
+        "width": "16",
+        "collapse": true
+    },
+    {
+        "id": "5566955c13b1ed8c",
+        "type": "ui_group",
+        "name": "Temperatur",
+        "tab": "c76e60bebc2623b5",
+        "order": 2,
+        "disp": true,
+        "width": "4",
+        "collapse": true
+    },
+    {
+        "id": "c76e60bebc2623b5",
+        "type": "ui_tab",
+        "name": "Batterie",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "bc442a4cdc4adb08",
+        "type": "ui_tab",
+        "name": "Graph",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
